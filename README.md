@@ -1,14 +1,42 @@
-# Welcome to your Lovable project
+# Trust Beacon Protect
+
+Создать интерактивное веб-приложение в стилистике мобильного банка ВТБ Онлайн — сервис безопасности «PAUSE / ВТБ Защитник» для защиты клиентов от социальной инженерии и мошенничества.
+
+Ключевой функционал:
+1. Мобильный интерфейс (Mobile-first экран смартфона ВТБ Онлайн):
+   - Статус системы безопасности («Под защитой», уровень риска, статус перехвата).
+   - Быстрые действия: экстренная блокировка операций, связь с поддержкой, проверка контакта.
+
+2. Журнал безопасности / Архив событий:
+   - Лента недавних событий (перехваченные звонки, подозрительные SMS, штатные звонки курьеров).
+   - Индикаторы риска: «Критический риск: психологическое давление», «Фишинг», «Безопасно».
+
+3. Карточка детального разбора инцидента:
+   - При клике на звонок/SMS — отображение полного транскрипта диалога.
+   - Подсветка триггеров манипуляции («срочно», «безопасный счёт ЦБ», «следственный комитет», «назовите код»).
+   - Вердикт и персональные советы ИИ клиенту (что делать, почему это мошенники).
+
+4. Интерактивная проверка аудио и текста:
+   - Распознавание речи через микрофон в браузере (Web Speech API): пользователь может нажать микрофон, произнести фразу, и речь на лету превратится в текст с мгновенным скорингом риска.
+   - Готовые демо-кейсы звонков мошенников (с возможностью запустить воспроизведение/симуляцию аудио и синхронный разбор текста).
+   - Поле для ручной вставки подозрительного текста или номера карты с кнопкой «Проверить».
+
+5. Вкладка/тумблер «Панель ИБ / Метрики»:
+   - Сводка для жюри: обнаруженные паттерны, точность скоринга, статистика социальной инженерии.
+
+Дизайн: современный, строгий, премиальный сине-голубой стиль ВТБ, интуитивно понятные бейджи и плавная анимация.
 
 This project was built with [Lovable](https://lovable.dev).
 
+**Live app**: https://trust-beacon-protect.lovable.app
+
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/5fcab6fc-8d27-4faf-ae2f-36ce1989900a).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +48,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
