@@ -2,11 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import {
   Shield, ShieldCheck, Lock, Headphones, UserSearch, Phone, MessageSquare, Mic, MicOff,
-  Play, Square, ChevronLeft, Home, ScanSearch, BarChart3, AlertTriangle, CheckCircle2, Sparkles as _s,
+  Play, Square, ChevronLeft, Home, ScanSearch, BarChart3, AlertTriangle, CheckCircle2,
+  Bell, ArrowRight, Signal, BatteryFull,
 } from "lucide-react";
 import { INCIDENTS, DEMOS, RISK_META, analyze, highlight, type Incident } from "@/lib/pause";
-
-void _s;
+import { Button } from "@/components/ui/button";
+import showcaseImage from "@/assets/security-showcase.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,42 +29,65 @@ function App() {
   const [tab, setTab] = useState<Tab>("home");
   const [open, setOpen] = useState<Incident | null>(null);
   const [blocked, setBlocked] = useState(false);
+  const phoneRef = useRef<HTMLDivElement>(null);
+
+  const focusTesting = () => {
+    setOpen(null);
+    setTab("check");
+    requestAnimationFrame(() => {
+      phoneRef.current?.querySelector<HTMLTextAreaElement>("textarea")?.focus({ preventScroll: true });
+    });
+  };
 
   return (
-    <div className="min-h-screen bg-[image:var(--gradient-page)] flex items-center justify-center p-4 lg:gap-12">
-      <aside className="hidden lg:block max-w-sm text-primary-foreground">
-        <div className="flex items-center gap-2 text-sm tracking-[0.3em] opacity-70">ВТБ · ЛАБОРАТОРИЯ ИБ</div>
-        <h1 className="mt-4 text-5xl font-extrabold leading-tight">PAUSE<br />ВТБ Защитник</h1>
-        <p className="mt-4 opacity-80">ИИ ставит разговор на паузу, когда мошенник давит на эмоции: срочность, «безопасный счёт», «следственный комитет», запрос кода.</p>
-        <div className="mt-6 flex gap-2">
-          {(["home", "check", "metrics"] as Tab[]).map((t) => (
-            <button key={t} onClick={() => { setTab(t); setOpen(null); }}
-              className={`rounded-full px-4 py-2 text-sm transition ${tab === t ? "bg-primary-foreground text-primary" : "bg-primary-foreground/10 hover:bg-primary-foreground/20"}`}>
-              {t === "home" ? "Главная" : t === "check" ? "Проверка" : "Панель ИБ"}
-            </button>
-          ))}
-        </div>
-      </aside>
+    <main className="showcase">
+      <img src={showcaseImage} alt="" aria-hidden="true" className="showcase-art" width={1536} height={1024} />
+      <div className="showcase-layout">
+        <aside className="showcase-copy text-showcase-foreground">
+          <div className="showcase-brand"><ShieldCheck strokeWidth={1.8} /><div><strong>ВТБ</strong> ЗАЩИТНИК</div></div>
+          <h1 className="showcase-title">Ваша безопасность <span>под контролем</span></h1>
+          <p className="showcase-description">ВТБ Защитник — это умная защита ваших финансов и данных в режиме реального времени.</p>
+          <div className="showcase-features">
+            {([
+              [ShieldCheck, <>Защита<br />от мошенников</>],
+              [Lock, <>Блокировка<br />подозрительных<br />операций</>],
+              [Bell, <>Мгновенные<br />уведомления</>],
+            ] as const).map(([Icon, label], index) => (
+              <div key={index} className="showcase-feature">
+                <div className="showcase-feature-icon"><Icon strokeWidth={1.8} /></div><p>{label}</p>
+              </div>
+            ))}
+          </div>
+          <p className="showcase-slogan">Спокойствие<span>всегда с вами</span></p>
+          <Button variant="outline" onClick={focusTesting} className="showcase-test">Перейти к проверке <ArrowRight /></Button>
+        </aside>
 
-      <div className="relative w-full max-w-[400px] h-[820px] max-h-[calc(100vh-2rem)] rounded-[2.75rem] bg-foreground p-2.5 shadow-[var(--shadow-phone)]">
-        <div className="relative h-full w-full overflow-hidden rounded-[2.25rem] bg-background flex flex-col">
-          <div className="flex justify-between px-7 pt-3 text-xs font-semibold"><span>12:46</span><span>5G ▮▮▮</span></div>
-          <div className="flex-1 overflow-y-auto">
+        <div className="phone-stage">
+        <div ref={phoneRef} className="phone-frame" aria-label="Интерактивный ВТБ Защитник">
+        <div className="phone-screen">
+          <div className="phone-status" aria-label="12:46, сеть 5G, заряд 100%">
+            <span>12:46</span><div className="dynamic-island" aria-hidden="true" />
+            <div className="phone-indicators"><span>5G</span><Signal aria-hidden="true" /><span>100%</span><BatteryFull aria-hidden="true" /></div>
+          </div>
+          <div className="phone-content">
             {open ? <IncidentView inc={open} onBack={() => setOpen(null)} /> :
               tab === "home" ? <HomeView onOpen={setOpen} blocked={blocked} setBlocked={setBlocked} goCheck={() => setTab("check")} /> :
               tab === "check" ? <CheckView /> : <MetricsView />}
           </div>
-          <nav className="grid grid-cols-3 border-t bg-card py-2">
+          <nav className="phone-nav" aria-label="Разделы приложения">
             {([["home", Home, "Главная"], ["check", ScanSearch, "Проверка"], ["metrics", BarChart3, "Панель ИБ"]] as const).map(([k, I, l]) => (
-              <button key={k} onClick={() => { setTab(k); setOpen(null); }}
-                className={`flex flex-col items-center gap-0.5 text-[11px] ${tab === k ? "text-accent" : "text-muted-foreground"}`}>
+              <Button key={k} variant="ghost" onClick={() => { setTab(k); setOpen(null); }} aria-current={tab === k ? "page" : undefined}
+                className={`phone-tab ${tab === k ? "text-accent" : "text-muted-foreground"}`}>
                 <I className="h-5 w-5" />{l}
-              </button>
+              </Button>
             ))}
           </nav>
+          <div className="phone-home-indicator" aria-hidden="true" />
         </div>
       </div>
-    </div>
+      </div>
+      </div>
+    </main>
   );
 }
 
@@ -74,15 +98,15 @@ function Badge({ risk, text }: { risk: keyof typeof RISK_META; text?: string }) 
 function HomeView({ onOpen, blocked, setBlocked, goCheck }: { onOpen: (i: Incident) => void; blocked: boolean; setBlocked: (b: boolean) => void; goCheck: () => void }) {
   return (
     <div className="pb-4">
-      <div className="mx-4 mt-3 rounded-3xl bg-[image:var(--gradient-hero)] p-5 text-primary-foreground animate-fade-in">
-        <div className="flex items-center justify-between">
-          <span className="text-xs tracking-widest opacity-75">ВТБ ЗАЩИТНИК</span>
-          <span className="flex items-center gap-1.5 text-xs"><span className="h-2 w-2 rounded-full bg-success animate-pulse" />PAUSE активен</span>
+      <div className="mx-4 mt-3 rounded-3xl bg-[image:var(--gradient-hero)] p-4 text-primary-foreground animate-fade-in">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+          <span className="min-w-0 text-[10px] opacity-75">ВТБ ЗАЩИТНИК</span>
+          <span className="flex shrink-0 items-center gap-1.5 text-[10px]"><span className="h-2 w-2 rounded-full bg-success animate-pulse" />PAUSE активен</span>
         </div>
         <div className="mt-4 flex items-center gap-3">
           <div className="grid h-14 w-14 place-items-center rounded-2xl bg-primary-foreground/15"><ShieldCheck className="h-8 w-8" /></div>
-          <div>
-            <div className="text-2xl font-bold">{blocked ? "Операции заморожены" : "Под защитой"}</div>
+          <div className="min-w-0">
+            <div className={`${blocked ? "text-lg" : "text-2xl"} font-bold`}>{blocked ? "Операции заморожены" : "Под защитой"}</div>
             <div className="text-sm opacity-80">Уровень риска: {blocked ? "блокировка" : "низкий"}</div>
           </div>
         </div>
@@ -99,9 +123,9 @@ function HomeView({ onOpen, blocked, setBlocked, goCheck }: { onOpen: (i: Incide
         <Quick icon={UserSearch} label="Проверить контакт" onClick={goCheck} />
       </div>
 
-      <div className="mx-4 mt-5 flex items-baseline justify-between">
-        <h2 className="text-lg font-bold">Журнал безопасности</h2>
-        <span className="text-xs text-muted-foreground">{INCIDENTS.length} события</span>
+      <div className="mx-4 mt-5 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-2">
+        <h2 className="min-w-0 text-base font-bold">Журнал безопасности</h2>
+        <span className="shrink-0 text-[10px] text-muted-foreground">{INCIDENTS.length} события</span>
       </div>
       <div className="mx-4 mt-2 space-y-2">
         {INCIDENTS.map((i, n) => (
@@ -223,7 +247,9 @@ function CheckView() {
 
   const playDemo = (i: number) => {
     stopDemo();
-    const demo = DEMOS[i]!; const words = demo.text.split(" ");
+    const demo = DEMOS[i];
+    if (!demo) return;
+    const words = demo.text.split(" ");
     setText(""); setPlaying(i);
     try {
       const u = new SpeechSynthesisUtterance(demo.text);
@@ -233,7 +259,7 @@ function CheckView() {
     let n = 0;
     timer.current = window.setInterval(() => {
       n++; setText(words.slice(0, n).join(" "));
-      if (n >= words.length) { clearInterval(timer.current!); timer.current = null; setPlaying(null); }
+      if (n >= words.length) { if (timer.current !== null) clearInterval(timer.current); timer.current = null; setPlaying(null); }
     }, 330);
   };
   const stopDemo = () => { if (timer.current) clearInterval(timer.current); timer.current = null; window.speechSynthesis?.cancel(); setPlaying(null); };
