@@ -54,6 +54,10 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  --color-showcase: var(--showcase);
+  --color-showcase-foreground: var(--showcase-foreground);
+  --color-showcase-muted: var(--showcase-muted);
+  --color-brand-cyan: var(--brand-cyan);
   --font-sans: "Manrope", system-ui, sans-serif;
   --animate-fade-in: fade-in .4s ease-out both;
   --color-sidebar: var(--sidebar);
@@ -67,11 +71,22 @@
 }
 
 :root {
+  --showcase: oklch(0.209 0.059 264);
+  --showcase-foreground: oklch(0.99 0.003 250);
+  --showcase-muted: oklch(0.8 0.038 254);
+  --brand-cyan: oklch(0.683 0.137 235);
+  --brand-deep: oklch(0.337 0.155 263);
+  --phone-frame: oklch(0.13 0.02 260);
+  --phone-metal: oklch(0.72 0.059 243);
+  --phone-edge: oklch(0.38 0.08 251);
+  --shadow-showcase-phone: 14px 22px 0 -9px var(--phone-edge), 0 35px 75px -15px oklch(0.08 0.04 260 / 0.8), 0 0 25px oklch(0.68 0.13 235 / 0.25);
+  --gradient-showcase: linear-gradient(115deg, var(--showcase), var(--brand-deep) 65%, var(--brand-cyan));
+  --gradient-feature: linear-gradient(140deg, var(--brand-deep), oklch(0.35 0.13 254 / 0.55));
   --radius: 0.75rem;
   --success: oklch(0.62 0.15 155);
   --warning: oklch(0.78 0.16 75);
   --warning-foreground: oklch(0.5 0.13 60);
-  --gradient-hero: linear-gradient(135deg, oklch(0.3 0.15 262), oklch(0.5 0.2 255));
+  --gradient-hero: linear-gradient(120deg, var(--brand-deep), oklch(0.52 0.23 260), oklch(0.57 0.2 253));
   --gradient-page: radial-gradient(circle at 20% 20%, oklch(0.42 0.18 258), oklch(0.18 0.09 265));
   --shadow-phone: 0 40px 80px -20px oklch(0.1 0.08 265 / 0.6);
   --background: oklch(0.975 0.006 250);
@@ -156,3 +171,57 @@
 
 @keyframes fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 body { font-family: var(--font-sans); }
+
+.showcase { position: relative; isolation: isolate; min-height: 100svh; overflow: hidden; background: var(--gradient-showcase); }
+.showcase-art { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.showcase-layout { width: min(1180px, 100%); min-height: 100svh; margin-inline: auto; padding: 54px 48px; display: grid; grid-template-columns: minmax(0, 1fr) 440px; gap: 32px; align-items: center; }
+.showcase-copy { align-self: center; padding-bottom: 20px; }
+.showcase-brand { display: flex; align-items: center; gap: 24px; margin-bottom: 48px; font-size: 24px; font-weight: 500; letter-spacing: 0; }
+.showcase-brand > svg { width: 52px; height: 58px; flex-shrink: 0; stroke: var(--showcase-foreground); filter: drop-shadow(0 3px 0 var(--brand-cyan)); }
+.showcase-brand strong { color: var(--brand-cyan); font-size: 28px; letter-spacing: 0.14em; margin-right: 10px; }
+.showcase-title { font-size: 50px; line-height: 1.15; font-weight: 800; letter-spacing: 0; margin: 0; }
+.showcase-title span { display: block; color: oklch(0.77 0.11 242); }
+.showcase-description { max-width: 370px; font-size: 17px; line-height: 1.65; margin-top: 22px; color: var(--showcase-muted); }
+.showcase-features { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 24px; margin-top: 34px; }
+.showcase-feature { position: relative; min-width: 0; }
+.showcase-feature + .showcase-feature::before { content: ''; position: absolute; height: 104px; width: 1px; background: color-mix(in oklch, var(--brand-cyan) 20%, transparent); left: -12px; top: 10px; }
+.showcase-feature-icon { display: grid; place-items: center; height: 60px; width: 60px; border-radius: 18px; background: var(--gradient-feature); border: 1px solid color-mix(in oklch, var(--brand-cyan) 22%, transparent); color: var(--brand-cyan); box-shadow: inset 0 0 16px color-mix(in oklch, var(--brand-cyan) 10%, transparent); }
+.showcase-feature-icon svg { height: 32px; width: 32px; }
+.showcase-feature:first-child svg { color: var(--showcase-foreground); }
+.showcase-feature p { margin-top: 12px; font-size: 13px; line-height: 1.45; color: var(--showcase-muted); }
+.showcase-slogan { width: fit-content; position: relative; margin-top: 32px; margin-bottom: 25px; font-family: 'Caveat', cursive; font-size: 39px; line-height: 0.95; color: var(--brand-cyan); transform: rotate(-8deg); }
+.showcase-slogan span { display: block; margin-left: 62px; }
+.showcase-slogan::after { content: ''; display: block; height: 2px; width: 190px; margin: 12px 0 0 77px; transform: rotate(-5deg); background: var(--brand-cyan); }
+.showcase-test { border-color: color-mix(in oklch, var(--brand-cyan) 45%, transparent); background: color-mix(in oklch, var(--brand-deep) 60%, transparent); color: var(--showcase-foreground); height: 42px; padding-inline: 18px; font-size: 13px; }
+.showcase-test:hover { background: var(--brand-deep); color: var(--showcase-foreground); }
+.phone-stage { display: flex; justify-content: center; min-width: 0; padding-right: 34px; }
+.phone-frame { position: relative; flex-shrink: 0; width: 370px; height: 770px; max-height: calc(100svh - 100px); min-height: 640px; padding: 9px; border-radius: 54px; border: 2px solid var(--phone-metal); background: var(--phone-frame); box-shadow: var(--shadow-showcase-phone); transform: rotate(8deg); }
+.phone-frame::before { content: ''; position: absolute; right: -7px; top: 210px; height: 63px; width: 4px; border-radius: 3px; background: var(--phone-metal); }
+.phone-screen { position: relative; height: 100%; width: 100%; border-radius: 43px; overflow: hidden; display: flex; flex-direction: column; background: var(--background); }
+.phone-status { height: 44px; flex-shrink: 0; display: grid; grid-template-columns: 1fr 100px 1fr; align-items: center; gap: 8px; padding: 0 20px; font-size: 11px; font-weight: 700; color: var(--foreground); }
+.dynamic-island { width: 88px; height: 25px; background: var(--phone-frame); border-radius: 20px; position: relative; }
+.dynamic-island::after { content: ''; position: absolute; right: 9px; top: 8px; width: 9px; height: 9px; border-radius: 50%; background: var(--phone-edge); box-shadow: inset 0 0 0 3px var(--phone-frame); }
+.phone-indicators { display: flex; align-items: center; justify-content: flex-end; gap: 3px; font-size: 9px; white-space: nowrap; }
+.phone-indicators svg { width: 13px; height: 13px; }
+.phone-content { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+.phone-content::-webkit-scrollbar { display: none; }
+.phone-nav { flex-shrink: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--border); background: var(--card); padding: 8px 8px 17px; }
+.phone-tab { height: 43px; display: flex; flex-direction: column; gap: 3px; padding: 0; font-size: 10px; font-weight: 500; border-radius: 8px; }
+.phone-tab svg { width: 20px; height: 20px; }
+.phone-home-indicator { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); height: 4px; width: 105px; background: var(--foreground); border-radius: 4px; pointer-events: none; }
+@media (min-width: 1400px) { .showcase-layout { width: 1280px; grid-template-columns: minmax(0, 1fr) 500px; gap: 55px; } .showcase-title { font-size: 56px; } .phone-frame { width: 390px; height: 800px; } }
+@media (max-width: 1099px) { .showcase-layout { grid-template-columns: minmax(0, 1fr) 370px; gap: 18px; padding: 44px 32px; } .showcase-title { font-size: 40px; } .showcase-brand { font-size: 19px; gap: 16px; } .showcase-brand strong { font-size: 23px; } .phone-frame { width: 340px; } .phone-stage { padding-right: 18px; } .showcase-features { gap: 18px; } }
+@media (max-width: 899px) {
+  .showcase { min-height: 100dvh; background: var(--background); overflow: visible; }
+  .showcase-art, .showcase-copy { display: none; }
+  .showcase-layout { display: block; min-height: 100dvh; padding: 0; width: 100%; }
+  .phone-stage { display: block; padding: 0; }
+  .phone-frame { width: 100%; height: 100dvh; min-height: 0; max-height: none; padding: 0; border: 0; border-radius: 0; transform: none; box-shadow: none; }
+  .phone-frame::before, .dynamic-island, .phone-home-indicator { display: none; }
+  .phone-screen { border-radius: 0; }
+  .phone-status { height: calc(30px + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top); grid-template-columns: minmax(0, 1fr) auto; padding-inline: 24px; }
+  .phone-indicators { font-size: 10px; gap: 4px; }
+  .phone-nav { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+  .phone-tab { height: 48px; font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

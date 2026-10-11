@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep desktop showcase and mobile app in one responsive shell around the same interactive views, so presentation changes never duplicate application state.
+- Store showcase artwork as a bundled image and define its styling through global semantic tokens, keeping decorative media separate from interactive phone content.
