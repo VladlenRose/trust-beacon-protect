@@ -223,10 +223,10 @@ function CheckView() {
 
   const playDemo = (i: number) => {
     stopDemo();
-    const words = DEMOS[i].text.split(" ");
+    const demo = DEMOS[i]!; const words = demo.text.split(" ");
     setText(""); setPlaying(i);
     try {
-      const u = new SpeechSynthesisUtterance(DEMOS[i].text);
+      const u = new SpeechSynthesisUtterance(demo.text);
       u.lang = "ru-RU"; u.rate = 1.05;
       window.speechSynthesis?.speak(u);
     } catch { /* no audio */ }
