@@ -19,7 +19,7 @@ export const groqAnalyze = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<Out> => {
     const key = "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";
     if (!key) return { ok: false, reason: "not_configured" };
-    const model = process.env["GROQ_MODEL"] || "llama-3.3-70b-versatile";
+    const model = "openai/gpt-oss-120b";
     const base = (process.env["GROQ_BASE_URL"] || "https://api.groq.com/openai/v1").replace(/\/+$/, "");
     try {
       const res = await fetch(`${base}/chat/completions`, {
