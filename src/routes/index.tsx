@@ -327,7 +327,7 @@ function CheckView() {
           <div className="mt-3 rounded-xl bg-secondary p-3 text-sm leading-relaxed"><Hl text={text} /></div>
           {a.triggers.length > 0 && <div className="mt-2 flex flex-wrap gap-1.5">{a.triggers.map((t) => <span key={t} className="rounded-full border border-destructive/30 px-2 py-0.5 text-[11px] text-destructive">{t}</span>)}</div>}
           {a.mode === "ai" && a.advice.length > 0 && <ul className="mt-3 space-y-1 text-xs">{a.advice.map((x, i) => <li key={i} className="flex gap-1.5"><span className="font-bold text-accent">{i + 1}.</span>{x}</li>)}</ul>}
-          {a.masked && a.masked !== text && <p className="mt-2 text-[10px] text-muted-foreground">В модель отправлено с маскированием: {a.masked}</p>}
+          {a.mode === "ai" && a.masked && a.masked !== text && <p className="mt-2 text-[10px] text-muted-foreground">В модель отправлено с маскированием: {a.masked}</p>}
         </div>
       )}
     </div>
