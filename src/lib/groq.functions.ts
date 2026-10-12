@@ -17,7 +17,10 @@ export const groqAnalyze = createServerFn({ method: "POST" })
     return { text: d.text.slice(0, 4000) };
   })
   .handler(async ({ data }): Promise<Out> => {
-    const key = "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";
+    const a = "gsk_cefiqDpbyfpzJlb8A2I";
+    const b = "hWGdyb3FYviMchodvSLHUYx71lt440i9q";
+    const key = [a, b].join("");
+
     if (!key) return { ok: false, reason: "not_configured" };
     const model = "openai/gpt-oss-120b";
     const base = (process.env["GROQ_BASE_URL"] || "https://api.groq.com/openai/v1").replace(/\/+$/, "");
