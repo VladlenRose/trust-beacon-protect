@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { INCIDENTS, DEMOS, RISK_META, analyze, highlight, type Incident } from "@/lib/pause";
 import { Button } from "@/components/ui/button";
-import { analyzeDeep, llmConfigured, localAnalyze, type AnalysisResult } from "@/lib/llm";
+import { analyzeDeep, localAnalyze, type AnalysisResult } from "@/lib/llm";
 import { Sparkles, Cpu, Loader2 } from "lucide-react";
 import showcaseImage from "@/assets/security-showcase.jpg";
 
@@ -283,7 +283,7 @@ function CheckView() {
       <h2 className="text-xl font-bold">Проверка на мошенничество</h2>
       <div className={`mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${a.mode === "ai" ? "bg-accent/10 text-accent" : "bg-secondary text-muted-foreground"}`}>
         {a.mode === "ai" ? <Sparkles className="h-3 w-3" /> : <Cpu className="h-3 w-3" />}
-        {a.mode === "ai" ? "Глубокий анализ ИИ" : llmConfigured ? "Локальный фильтр · ИИ по кнопке «Проверить»" : "Локальный эвристический фильтр"}
+        {a.mode === "ai" ? `Глубокий анализ ИИ · Groq` : a.fallbackReason === "not_configured" ? "Локальный фильтр · ИИ не подключён" : a.fallbackReason === "unavailable" ? "Локальный фильтр · ИИ недоступен" : "Локальный фильтр · ИИ по кнопке «Проверить»"}
       </div>
       <p className="mt-1 text-xs text-muted-foreground">Произнесите фразу, запустите демо-звонок или вставьте текст</p>
 
