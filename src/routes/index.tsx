@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { INCIDENTS, DEMOS, RISK_META, analyze, highlight, type Incident } from "@/lib/pause";
 import { Button } from "@/components/ui/button";
-import { analyzeDeep, llmConfigured, localAnalyze, type AnalysisResult } from "@/lib/llm";
+import { analyzeDeep, localAnalyze, type AnalysisResult } from "@/lib/llm";
 import { Sparkles, Cpu, Loader2 } from "lucide-react";
 import showcaseImage from "@/assets/security-showcase.jpg";
 
@@ -283,7 +283,7 @@ function CheckView() {
       <h2 className="text-xl font-bold">Проверка на мошенничество</h2>
       <div className={`mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${a.mode === "ai" ? "bg-accent/10 text-accent" : "bg-secondary text-muted-foreground"}`}>
         {a.mode === "ai" ? <Sparkles className="h-3 w-3" /> : <Cpu className="h-3 w-3" />}
-        {a.mode === "ai" ? "Глубокий анализ ИИ" : llmConfigured ? "Локальный фильтр · ИИ по кнопке «Проверить»" : "Локальный эвристический фильтр"}
+        {a.mode === "ai" ? `Глубокий анализ ИИ · Groq` : a.fallbackReason === "not_configured" ? "Локальный фильтр · ИИ не подключён" : a.fallbackReason === "unavailable" ? "Локальный фильтр · ИИ недоступен" : "Локальный фильтр · ИИ по кнопке «Проверить»"}
       </div>
       <p className="mt-1 text-xs text-muted-foreground">Произнесите фразу, запустите демо-звонок или вставьте текст</p>
 
@@ -327,7 +327,7 @@ function CheckView() {
           <div className="mt-3 rounded-xl bg-secondary p-3 text-sm leading-relaxed"><Hl text={text} /></div>
           {a.triggers.length > 0 && <div className="mt-2 flex flex-wrap gap-1.5">{a.triggers.map((t) => <span key={t} className="rounded-full border border-destructive/30 px-2 py-0.5 text-[11px] text-destructive">{t}</span>)}</div>}
           {a.mode === "ai" && a.advice.length > 0 && <ul className="mt-3 space-y-1 text-xs">{a.advice.map((x, i) => <li key={i} className="flex gap-1.5"><span className="font-bold text-accent">{i + 1}.</span>{x}</li>)}</ul>}
-          {a.masked && a.masked !== text && <p className="mt-2 text-[10px] text-muted-foreground">В модель отправлено с маскированием: {a.masked}</p>}
+          {a.mode === "ai" && a.masked && a.masked !== text && <p className="mt-2 text-[10px] text-muted-foreground">В модель отправлено с маскированием: {a.masked}</p>}
         </div>
       )}
     </div>
