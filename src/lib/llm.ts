@@ -9,9 +9,9 @@ export type AnalysisResult = {
   masked?: string;
 };
 
-const LLM_URL = (import.meta.env.VITE_LLM_URL as string | undefined)?.trim() || "";
-const LLM_KEY = (import.meta.env.VITE_LLM_API_KEY as string | undefined)?.trim() || "";
-const LLM_MODEL = (import.meta.env.VITE_LLM_MODEL as string | undefined)?.trim() || "gpt-4o-mini";
+const LLM_URL = (import.meta.env['VITE_LLM_URL'] as string | undefined)?.trim() || "";
+const LLM_KEY = (import.meta.env['VITE_LLM_API_KEY'] as string | undefined)?.trim() || "";
+const LLM_MODEL = (import.meta.env['VITE_LLM_MODEL'] as string | undefined)?.trim() || "gpt-4o-mini";
 const TIMEOUT_MS = 12000;
 
 export const llmConfigured = Boolean(LLM_URL);
