@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import { INCIDENTS, DEMOS, RISK_META, analyze, highlight, type Incident } from "@/lib/pause";
 import { Button } from "@/components/ui/button";
+import { analyzeDeep, llmConfigured, localAnalyze, type AnalysisResult } from "@/lib/llm";
+import { Sparkles, Cpu, Loader2 } from "lucide-react";
 import showcaseImage from "@/assets/security-showcase.jpg";
 
 export const Route = createFileRoute("/")({
@@ -223,7 +225,19 @@ function CheckView() {
   const [err, setErr] = useState("");
   const recRef = useRef<SR | null>(null);
   const timer = useRef<number | null>(null);
-  const a = analyze(text);
+  const [deep, setDeep] = useState<AnalysisResult | null>(null);
+  const [busy, setBusy] = useState(false);
+  const deepFor = useRef("");
+  const local = localAnalyze(text);
+  const a = deep && deepFor.current === text ? deep : local;
+
+  const runCheck = async () => {
+    const t = text.trim();
+    if (!t) return;
+    setText(t); setBusy(true);
+    const r = await analyzeDeep(t);
+    deepFor.current = t; setDeep(r); setBusy(false);
+  };
 
   useEffect(() => () => { recRef.current?.stop(); if (timer.current) clearInterval(timer.current); window.speechSynthesis?.cancel(); }, []);
 
@@ -267,7 +281,11 @@ function CheckView() {
   return (
     <div className="p-4 animate-fade-in">
       <h2 className="text-xl font-bold">Проверка на мошенничество</h2>
-      <p className="text-xs text-muted-foreground">Произнесите фразу, запустите демо-звонок или вставьте текст</p>
+      <div className={`mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${a.mode === "ai" ? "bg-accent/10 text-accent" : "bg-secondary text-muted-foreground"}`}>
+        {a.mode === "ai" ? <Sparkles className="h-3 w-3" /> : <Cpu className="h-3 w-3" />}
+        {a.mode === "ai" ? "Глубокий анализ ИИ" : llmConfigured ? "Локальный фильтр · ИИ по кнопке «Проверить»" : "Локальный эвристический фильтр"}
+      </div>
+      <p className="mt-1 text-xs text-muted-foreground">Произнесите фразу, запустите демо-звонок или вставьте текст</p>
 
       <div className="mt-4 flex flex-col items-center">
         <button onClick={toggleMic}
@@ -291,7 +309,7 @@ function CheckView() {
       <textarea value={text} onChange={(e) => setText(e.target.value)} rows={4} placeholder="Вставьте текст SMS, сообщения или номер карты…"
         className="mt-3 w-full resize-none rounded-2xl border bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
       <div className="mt-2 flex gap-2">
-        <button onClick={() => setText((t) => t.trim())} className="flex-1 rounded-xl bg-primary py-2.5 text-sm font-semibold text-primary-foreground">Проверить</button>
+        <button onClick={runCheck} disabled={busy} className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-70">{busy && <Loader2 className="h-4 w-4 animate-spin" />}{busy ? "Анализ…" : "Проверить"}</button>
         <button onClick={() => { stopDemo(); setText(""); }} className="rounded-xl border px-4 text-sm">Очистить</button>
       </div>
 
@@ -308,6 +326,8 @@ function CheckView() {
           </div>
           <div className="mt-3 rounded-xl bg-secondary p-3 text-sm leading-relaxed"><Hl text={text} /></div>
           {a.triggers.length > 0 && <div className="mt-2 flex flex-wrap gap-1.5">{a.triggers.map((t) => <span key={t} className="rounded-full border border-destructive/30 px-2 py-0.5 text-[11px] text-destructive">{t}</span>)}</div>}
+          {a.mode === "ai" && a.advice.length > 0 && <ul className="mt-3 space-y-1 text-xs">{a.advice.map((x, i) => <li key={i} className="flex gap-1.5"><span className="font-bold text-accent">{i + 1}.</span>{x}</li>)}</ul>}
+          {a.masked && a.masked !== text && <p className="mt-2 text-[10px] text-muted-foreground">В модель отправлено с маскированием: {a.masked}</p>}
         </div>
       )}
     </div>
