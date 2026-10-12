@@ -17,7 +17,7 @@ export const groqAnalyze = createServerFn({ method: "POST" })
     return { text: d.text.slice(0, 4000) };
   })
   .handler(async ({ data }): Promise<Out> => {
-    const key = process.env["GROQ_API_KEY"];
+    const key = process.env["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"];
     if (!key) return { ok: false, reason: "not_configured" };
     const model = process.env["GROQ_MODEL"] || "llama-3.3-70b-versatile";
     const base = (process.env["GROQ_BASE_URL"] || "https://api.groq.com/openai/v1").replace(/\/+$/, "");
