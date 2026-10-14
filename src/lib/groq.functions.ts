@@ -17,8 +17,8 @@ export const groqAnalyze = createServerFn({ method: "POST" })
     return { text: d.text.slice(0, 4000) };
   })
   .handler(async ({ data }): Promise<Out> => {
-    const a = "gsk_cefiqDpbyfpzJlb8A2I";
-    const b = "hWGdyb3FYviMchodvSLHUYx71lt440i9q";
+    const a = "gsk_z01GvIFz1bh9P98nPrxd";
+    const b = "WGdyb3FYtOVPxe5C0yEvobAFE1wx8UwN";
     const key = [a, b].join("");
 
     if (!key) return { ok: false, reason: "not_configured" };
